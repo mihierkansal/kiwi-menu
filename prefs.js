@@ -140,6 +140,43 @@ const OptionsPage = GObject.registerClass(
 
       menuGroup.add(appStoreCommandRow);
 
+      // About menu item label
+      const defaultAboutLabel = '';
+      const aboutLabelRow = new Adw.EntryRow({
+        title: this._('About Menu Item Label'),
+      });
+      aboutLabelRow.set_text(this._settings.get_string('about-menu-label'));
+      aboutLabelRow.set_tooltip_text(
+        this._('Leave empty to keep the translated "About This PC" text.')
+      );
+
+      const aboutLabelRestoreButton = new Gtk.Button({
+        icon_name: 'edit-undo-symbolic',
+        has_frame: false,
+        tooltip_text: this._('Restore Default'),
+        valign: Gtk.Align.CENTER,
+      });
+      aboutLabelRestoreButton.add_css_class('circular');
+      aboutLabelRow.add_suffix(aboutLabelRestoreButton);
+
+      const updateAboutRestoreButtonState = () => {
+        const currentText = aboutLabelRow.get_text
+          ? aboutLabelRow.get_text()
+          : aboutLabelRow.text ?? '';
+        const isDefault = currentText.trim() === defaultAboutLabel;
+        aboutLabelRestoreButton.set_sensitive(!isDefault);
+        aboutLabelRestoreButton.set_visible(!isDefault);
+      };
+
+      aboutLabelRestoreButton.connect('clicked', () => {
+        aboutLabelRow.set_text(defaultAboutLabel);
+      });
+
+      aboutLabelRow.connect('notify::text', updateAboutRestoreButtonState);
+      updateAboutRestoreButtonState();
+
+      menuGroup.add(aboutLabelRow);
+
       // Force Quit keyboard shortcut
       const defaultForceQuitShortcut = '<Alt><Super>Escape';
       const forceQuitShortcutRow = new Adw.ActionRow({
@@ -634,6 +671,13 @@ const OptionsPage = GObject.registerClass(
       this._settings.bind(
         'app-store-command',
         appStoreCommandRow,
+        'text',
+        Gio.SettingsBindFlags.DEFAULT
+      );
+
+      this._settings.bind(
+        'about-menu-label',
+        aboutLabelRow,
         'text',
         Gio.SettingsBindFlags.DEFAULT
       );

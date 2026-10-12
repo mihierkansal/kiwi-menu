@@ -56,6 +56,11 @@
       <summary>Custom menu item shortcut</summary>
       <description>Keyboard shortcut that runs the custom menu item command</description>
     </key>
+    <key type="s" name="about-menu-label">
+      <default>''</default>
+      <summary>About menu item label</summary>
+      <description>Overrides the text of the About This PC menu entry. Empty keeps the translated default</description>
+    </key>
     <key type="b" name="macos-accelerators">
       <default>false</default>
       <summary>macOS style accelerator symbols</summary>

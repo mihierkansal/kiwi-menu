@@ -115,6 +115,11 @@ export const KiwiMenu = GObject.registerClass(
         )
       );
       this._settingsSignalIds.push(
+        this._settings.connect('changed::about-menu-label', () =>
+          this._renderPopupMenu().catch(logError)
+        )
+      );
+      this._settingsSignalIds.push(
         this._settings.connect('changed::custom-menu-enabled', () =>
           this._renderPopupMenu().catch(logError)
         )
@@ -336,6 +341,15 @@ export const KiwiMenu = GObject.registerClass(
           title = fullName
             ? this._gettext('Log Out %s...').format(fullName)
             : translatedTitle;
+        }
+
+        // A user-supplied About label wins over the translated default; an
+        // empty value keeps every existing translation working unchanged.
+        if (item.type === 'menu' && cmds?.includes('about-this-pc')) {
+          const customAboutLabel = this._settings.get_string('about-menu-label').trim();
+          if (customAboutLabel.length > 0) {
+            title = customAboutLabel;
+          }
         }
 
         const outputItem = {
