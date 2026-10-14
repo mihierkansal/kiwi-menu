@@ -61,6 +61,11 @@
       <summary>Hide Menu Item Icons</summary>
       <description>Hide the icons shown next to Kiwi Menu entries. The Recent Items submenu keeps its icons.</description>
     </key>
+    <key type="s" name="about-menu-label">
+      <default>''</default>
+      <summary>About menu item label</summary>
+      <description>Overrides the text of the About This PC menu entry. Empty keeps the translated default</description>
+    </key>
     <key type="b" name="macos-accelerators">
       <default>false</default>
       <summary>macOS style accelerator symbols</summary>
